@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Falcon Outreach AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex flex-col items-center justify-center p-4">
+    <div class="max-w-xl w-full bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700">
+        <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r fancy-text from-blue-400 to-emerald-400 mb-2">Falcon Outreach AI</h1>
+        <p class="text-slate-400 mb-6 text-sm">Automate your guest posting pitches and negotiate deal terms instantly using AI.</p>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Website URL / Domain</label>
+                <input type="text" id="domain" placeholder="example.com" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition">
+            </div>
+            <button onclick="startCampaign()" class="w-full bg-gradient-to-r from-blue-500 to-emerald-500 font-bold py-3 rounded-lg hover:opacity-90 transition active:scale-[0.98]">Launch AI Campaign</button>
+        </div>
+        <div id="output" class="mt-6 p-4 bg-slate-900 rounded-lg border border-slate-700 hidden text-sm text-slate-300 whitespace-pre-line"></div>
+    </div>
+
+    <script>
+        async function startCampaign() {
+            const domain = document.getElementById('domain').value;
+            const output = document.getElementById('output');
+            if(!domain) return alert('Please enter a domain');
+            
+            output.classList.remove('hidden');
+            output.innerText = '✨ Falcon AI Engine analysis started...';
+            
+            try {
+                const res = await fetch('/api/v1/campaign', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ domain })
+                });
+                const data = await res.json();
+                output.innerText = data.pitch || 'Campaign created successfully!';
+            } catch(e) {
+                output.innerText = '❌ Error connecting to Falcon Engine.';
+            }
+        }
+    </script>
+</body>
+</html>
